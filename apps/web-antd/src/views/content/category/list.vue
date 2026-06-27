@@ -27,10 +27,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick),
     height: 'auto',
     keepSource: true,
-    pagerConfig: { enabled: false },
     proxyConfig: {
       ajax: {
-        query: async (_p, formValues) => getCategoryList(formValues),
+        query: async ({ page }, formValues) =>
+          getCategoryList({ page: page.currentPage, pageSize: page.pageSize, ...formValues }),
       },
     },
     rowConfig: { keyField: 'id' },
