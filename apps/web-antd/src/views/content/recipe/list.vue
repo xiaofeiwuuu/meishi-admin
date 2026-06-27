@@ -11,12 +11,18 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteRecipe, getRecipeList, updateRecipe } from '#/api/content/recipe';
 
 import { useColumns, useGridFormSchema } from './data';
+import Detail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
 const { hasAccessByCodes } = useAccess();
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
+  destroyOnClose: true,
+});
+
+const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
+  connectedComponent: Detail,
   destroyOnClose: true,
 });
 
@@ -41,6 +47,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
 });
 
 function onActionClick(e: OnActionClickParams<ContentRecipeApi.Recipe>) {
+  if (e.code === 'detail') detailDrawerApi.setData(e.row).open();
   if (e.code === 'edit') formDrawerApi.setData(e.row).open();
   if (e.code === 'delete') onDelete(e.row);
 }
@@ -70,6 +77,7 @@ function onDelete(row: ContentRecipeApi.Recipe) {
 <template>
   <Page auto-content-height>
     <FormDrawer @success="() => gridApi.query()" />
+    <DetailDrawer />
     <Grid table-title="菜谱管理" />
   </Page>
 </template>

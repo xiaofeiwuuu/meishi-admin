@@ -103,6 +103,7 @@ export function useColumns(
         attrs: { nameField: 'name', nameTitle: '菜谱', onClick: onActionClick },
         name: 'CellOperation',
         options: [
+          { code: 'detail', text: '查看' },
           { code: 'edit', text: '编辑', show: hasAccessByCodes(['recipe:edit']) },
           { code: 'delete', show: hasAccessByCodes(['recipe:delete']) },
         ],
@@ -110,7 +111,7 @@ export function useColumns(
       field: 'operation',
       fixed: 'right',
       title: '操作',
-      width: 130,
+      width: 180,
     },
   ];
 }
