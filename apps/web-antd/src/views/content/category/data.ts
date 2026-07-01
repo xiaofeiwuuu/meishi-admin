@@ -45,12 +45,12 @@ export function useColumns(
 ): VxeTableGridOptions['columns'] {
   const { hasAccessByCodes } = useAccess();
   return [
-    { field: 'name', title: '分类名称', width: 160 },
-    { field: 'id', title: '标识', width: 140 },
-    { field: 'parent', title: '上级分类', width: 140 },
+    { field: 'name', title: '分类名称', minWidth: 160 },
+    { field: 'id', title: '标识', minWidth: 160 },
+    { field: 'parent', title: '上级分类', minWidth: 140 },
     { field: 'recipeCount', title: '菜谱数', width: 100 },
     { field: 'sort', title: '排序', width: 80 },
-    { field: 'createTime', formatter: 'formatDateTime', title: '创建时间', width: 180 },
+    { field: 'createTime', formatter: 'formatDateTime', title: '创建时间', minWidth: 200 },
     {
       align: 'center',
       cellRender: {
