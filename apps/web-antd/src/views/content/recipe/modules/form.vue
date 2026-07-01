@@ -107,7 +107,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (!open) return;
     reset();
     await loadCategories();
-    const row = drawerApi.getData<{ id?: string }>();
+    const row = drawerApi.getData<{ draft?: any; id?: string }>();
     if (row?.id) {
       id.value = row.id;
       const d: any = await getRecipeDetail(row.id);
@@ -117,6 +117,15 @@ const [Drawer, drawerApi] = useVbenDrawer({
       form.cover = d.cover ?? '';
       form.description = d.description ?? '';
       form.tips = d.tips ?? '';
+      form.main = (d.ingredients?.main ?? []).map((i: any) => ({ ...i }));
+      form.sub = (d.ingredients?.sub ?? []).map((i: any) => ({ ...i }));
+      form.steps = (d.steps ?? []).map((s: any) => ({ desc: s.desc ?? '', img: s.img ?? '' }));
+    } else if (row?.draft) {
+      // AI 视频导入的草稿:走新建流程,预填待审核
+      id.value = undefined;
+      const d = row.draft;
+      form.name = d.name ?? '';
+      form.cover = d.cover ?? '';
       form.main = (d.ingredients?.main ?? []).map((i: any) => ({ ...i }));
       form.sub = (d.ingredients?.sub ?? []).map((i: any) => ({ ...i }));
       form.steps = (d.steps ?? []).map((s: any) => ({ desc: s.desc ?? '', img: s.img ?? '' }));

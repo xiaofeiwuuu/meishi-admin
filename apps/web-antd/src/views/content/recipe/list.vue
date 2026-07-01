@@ -14,6 +14,7 @@ import { deleteRecipe, getRecipeList, updateRecipe } from '#/api/content/recipe'
 import { useColumns, useGridFormSchema } from './data';
 import Detail from './modules/detail.vue';
 import Form from './modules/form.vue';
+import VideoImport from './modules/video-import.vue';
 
 const { hasAccessByCodes } = useAccess();
 
@@ -26,6 +27,16 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
   connectedComponent: Detail,
   destroyOnClose: true,
 });
+
+const [VideoImportDrawer, videoImportApi] = useVbenDrawer({
+  connectedComponent: VideoImport,
+  destroyOnClose: true,
+});
+
+// 视频导入出草稿 → 打开菜谱编辑器审核(走新建流程)
+function onReviewDraft(draft: any) {
+  formDrawerApi.setData({ draft }).open();
+}
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: { schema: useGridFormSchema(), submitOnChange: true },
@@ -79,8 +90,16 @@ function onDelete(row: ContentRecipeApi.Recipe) {
   <Page auto-content-height>
     <FormDrawer @success="() => gridApi.query()" />
     <DetailDrawer />
+    <VideoImportDrawer @review="onReviewDraft" />
     <Grid table-title="菜谱管理">
       <template #toolbar-tools>
+        <Button
+          v-if="hasAccessByCodes(['recipe:create'])"
+          class="mr-2"
+          @click="videoImportApi.open()"
+        >
+          🎬 视频导入
+        </Button>
         <Button
           v-if="hasAccessByCodes(['recipe:create'])"
           type="primary"
