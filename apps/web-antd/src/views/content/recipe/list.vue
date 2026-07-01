@@ -4,8 +4,9 @@ import type { ContentRecipeApi } from '#/api/content/recipe';
 
 import { useAccess } from '@vben/access';
 import { Page, useVbenDrawer } from '@vben/common-ui';
+import { Plus } from '@vben/icons';
 
-import { message, Modal } from 'ant-design-vue';
+import { Button, message, Modal } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteRecipe, getRecipeList, updateRecipe } from '#/api/content/recipe';
@@ -78,6 +79,17 @@ function onDelete(row: ContentRecipeApi.Recipe) {
   <Page auto-content-height>
     <FormDrawer @success="() => gridApi.query()" />
     <DetailDrawer />
-    <Grid table-title="菜谱管理" />
+    <Grid table-title="菜谱管理">
+      <template #toolbar-tools>
+        <Button
+          v-if="hasAccessByCodes(['recipe:create'])"
+          type="primary"
+          @click="formDrawerApi.setData({}).open()"
+        >
+          <Plus class="size-5" />
+          新增菜谱
+        </Button>
+      </template>
+    </Grid>
   </Page>
 </template>

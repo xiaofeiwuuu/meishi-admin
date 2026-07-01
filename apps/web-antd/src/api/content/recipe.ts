@@ -28,12 +28,30 @@ async function getRecipeDetail(id: string) {
   return requestClient.get(`/admin/recipes/${id}`);
 }
 
-async function updateRecipe(id: string, data: Partial<ContentRecipeApi.Recipe>) {
+async function createRecipe(data: Record<string, any>) {
+  return requestClient.post<{ id: string }>('/admin/recipes', data);
+}
+
+async function updateRecipe(id: string, data: Record<string, any>) {
   return requestClient.put(`/admin/recipes/${id}`, data);
+}
+
+/** 上传图片,返回可访问 URL */
+async function uploadRecipeImage(file: File) {
+  const fd = new FormData();
+  fd.append('file', file);
+  return requestClient.post<{ url: string }>('/admin/upload', fd);
 }
 
 async function deleteRecipe(id: string) {
   return requestClient.delete(`/admin/recipes/${id}`);
 }
 
-export { deleteRecipe, getRecipeDetail, getRecipeList, updateRecipe };
+export {
+  createRecipe,
+  deleteRecipe,
+  getRecipeDetail,
+  getRecipeList,
+  updateRecipe,
+  uploadRecipeImage,
+};
